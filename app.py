@@ -6,6 +6,10 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 
 from flask import Flask, jsonify
+from datetime import date
+from datetime import datetime
+from datetime import timedelta as dtd
+
 
 
 #################################################
@@ -37,8 +41,8 @@ def welcome():
     """List all available api routes."""
     return (
         f"Available Routes:<br/>"
-        f"/api/v1.0/stations<br/>"
-        f"/api/v1.0/percipitation<br/>"
+        f"/api/v1.0/precipitation<br/>"
+        f"/api/v1.0/stations<br/>"        
         f"/api/v1.0/tobs<br/>"
         f"/api/v1.0/<start> <br/>"
         f"/api/v1.0/<start>/<end> <br/>"
@@ -54,7 +58,7 @@ def stations():
 
     """Return a list of all stations"""
     # Query all stations
-    results = session.query(measurement.station).all()
+    results = session.query(Stationt.station).all()
 
     session.close()
 
@@ -65,14 +69,14 @@ def stations():
 
 #Convert the query results to a Dictionary using `date` as the key and `prcp` as the value.
 # Return the JSON representation of your dictionary.
-@app.route("/api/v1.0/percipitation")
+@app.route("/api/v1.0/precipitation")
 def stations():
     # Create our session (link) from Python to the DB
     session = Session(engine)
     
     
     """Return a list of date and percipitation"""
-    results = session.query(measurement.date, measurement.prcp).all()
+    results = session.query(Measurement.date, Measurement.prcp).all()
 
     session.close()
     measurement_dict = {}
